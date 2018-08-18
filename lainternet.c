@@ -10,6 +10,7 @@ int
 main (int argc, char * argv[])
 {
     struct lainternet_config config;
+    
     config.is_custom_arg = 2;
     config.location = DEFAULT_CONFIG_LOCATION;
     
@@ -39,21 +40,33 @@ main (int argc, char * argv[])
     }
     
     /* read config file and parse */
+    ready_config (&config);
+    
+    printf ("Email: %s Password: %s SMTP Mail: %s IMAP Mail: %s\n",
+	    config.email, config.password, config.smtp_mail_server,
+	    config.imap_mail_server);
+    
+    return 0;
+}
+
+int
+ready_config (struct lainternet_config * config)
+{
     FILE * config_file;
-    config_file = fopen (config.location, "r");
+    config_file = fopen (config->location, "r");
     int parse_result;
-    parse_result = parse_config_file (&config, config_file);
+    parse_result = parse_config_file (config, config_file);
 
     fclose (config_file);
 
-    /* there was an error in parsing*/
+    /* there was an error in parsing */
     if (parse_result != 0)
     {
 	switch (parse_result)
 	{
 	    case 1:
 		printf ("Error opening configuration file\n");
-		perror (config.location);
+		perror (config->location);
 		return 1;
 		break;
 	    case 2:
@@ -69,9 +82,7 @@ main (int argc, char * argv[])
 	}
 	
     }
-    
-    printf ("Email: %s Password: %s SMTP Mail: %s IMAP Mail: %s\n", config.email, config.password, config.smtp_mail_server, config.imap_mail_server);
-    
+
     return 0;
 }
 
@@ -111,11 +122,14 @@ parse_config_file (struct lainternet_config * config, FILE * config_file)
 	{
 	    return 2;
 	}
+	
 	/* get second token (value) */
 	token = strtok (NULL, " ");
 	/* remove new line characters from string */
 	token[strcspn (token, "\r\n")] = 0;
+	/* initializes char pointer in struct */
 	*config_member = malloc (sizeof (token));
+	/* copies token to char pointer in struct */
 	strcpy (*config_member, token);
     }
     

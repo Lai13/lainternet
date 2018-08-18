@@ -13,6 +13,8 @@ struct lainternet_config
     char * password; /* password of email */
 };
 
+int ready_config (struct lainternet_config * config);
+
 int parse_config_file (struct lainternet_config * config, FILE * config_file);
 
 #endif
