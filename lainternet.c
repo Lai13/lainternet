@@ -54,7 +54,7 @@ main (int argc, char * argv[])
 
 
     /* ready lainternet server */
-    int interface = get_tun_interface ("tun0");
+    int interface = get_tun_interface ();
     if (interface == -1)
 	return 1;
     
@@ -62,7 +62,7 @@ main (int argc, char * argv[])
 }
 
 int
-get_tun_interface (char * dev)
+get_tun_interface ()
 {
     int interface = open ("/dev/net/tun", O_RDWR | O_NONBLOCK);
 
