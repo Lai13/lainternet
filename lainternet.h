@@ -17,4 +17,6 @@ int ready_config (struct lainternet_config * config);
 
 int parse_config_file (struct lainternet_config * config, FILE * config_file);
 
+int get_tun_interface (char * dev);
+
 #endif

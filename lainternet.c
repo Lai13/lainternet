@@ -3,6 +3,12 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <linux/if_tun.h>
 
 #include "lainternet.h"
 
@@ -45,8 +51,34 @@ main (int argc, char * argv[])
     printf ("Email: %s Password: %s SMTP Mail: %s IMAP Mail: %s\n",
 	    config.email, config.password, config.smtp_mail_server,
 	    config.imap_mail_server);
+
+
+    /* ready lainternet server */
+    int interface = get_tun_interface ("tun0");
+    if (interface == -1)
+	return 1;
     
     return 0;
+}
+
+int
+get_tun_interface (char * dev)
+{
+    int interface = open ("/dev/net/tun", O_RDWR | O_NONBLOCK);
+
+    struct ifreq ifr;
+    memset (&ifr, 0, sizeof (ifr));
+
+    /* set as TUN device and do not provide packet info */
+    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+
+    if (ioctl (interface, TUNSETIFF, &ifr))
+    {
+	perror ("Error getting TUN interface");
+	return -1;
+    }
+
+    return interface;
 }
 
 int
