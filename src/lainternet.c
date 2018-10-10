@@ -11,6 +11,7 @@
 #include <linux/if_tun.h>
 
 #include "lainternet.h"
+#include "POP3.h"
 
 int
 main (int argc, char * argv[])
@@ -21,11 +22,11 @@ main (int argc, char * argv[])
 
     /* set path of config file */
     char path[512];
-    strcat (strcpy (file, getenv ("HOME")),
+    strcat (strcpy (path, getenv ("HOME")),
 	    "/.config/lainternet/lainternet.conf");
 
-    config.location = malloc (strlen (file) * sizeof (char));
-    strcpy (config.location, file);
+    config.location = malloc (strlen (path) * sizeof (char));
+    strcpy (config.location, path);
     
     /* read arguments */
     static struct option long_options[] =
@@ -54,6 +55,9 @@ main (int argc, char * argv[])
     
     /* read config file and parse */
     ready_config (&config);
+
+    init_pop3 (&config);
+    get_oldest_email ();
     
     return 0;
 }
