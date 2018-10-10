@@ -1,8 +1,6 @@
 #ifndef LAINTERNET_H
 #define LAINTERNET_H
 
-#define DEFAULT_CONFIG_LOCATION "lainternet.conf"
-
 struct lainternet_config
 {
     int  is_custom_arg; /* if has been set by custom arguments */

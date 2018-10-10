@@ -17,8 +17,15 @@ main (int argc, char * argv[])
 {
     struct lainternet_config config;
     
-    config.is_custom_arg = 2;
-    config.location = DEFAULT_CONFIG_LOCATION;
+    config.is_custom_arg = 0;
+
+    /* set path of config file */
+    char path[512];
+    strcat (strcpy (file, getenv ("HOME")),
+	    "/.config/lainternet/lainternet.conf");
+
+    config.location = malloc (strlen (file) * sizeof (char));
+    strcpy (config.location, file);
     
     /* read arguments */
     static struct option long_options[] =
@@ -47,11 +54,6 @@ main (int argc, char * argv[])
     
     /* read config file and parse */
     ready_config (&config);
-    
-    printf ("Email: %s Password: %s SMTP Mail: %s POP3 Mail: %s\n",
-	    config.email, config.password, config.smtp_mail_server,
-	    config.pop3_mail_server);
-
 
     /* ready lainternet server */
     int interface = get_tun_interface ();
