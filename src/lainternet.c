@@ -48,9 +48,9 @@ main (int argc, char * argv[])
     /* read config file and parse */
     ready_config (&config);
     
-    printf ("Email: %s Password: %s SMTP Mail: %s IMAP Mail: %s\n",
+    printf ("Email: %s Password: %s SMTP Mail: %s POP3 Mail: %s\n",
 	    config.email, config.password, config.smtp_mail_server,
-	    config.imap_mail_server);
+	    config.pop3_mail_server);
 
 
     /* ready lainternet server */
@@ -145,9 +145,9 @@ parse_config_file (struct lainternet_config * config, FILE * config_file)
 	{
 	   config_member = &(config->smtp_mail_server);
 	}
-	else if (strcmp (token, "imap-mail-server") == 0)
+	else if (strcmp (token, "pop3-mail-server") == 0)
 	{
-	    config_member = &(config->imap_mail_server);
+	    config_member = &(config->pop3_mail_server);
 	}
 	/* field is not recognized */
 	else
