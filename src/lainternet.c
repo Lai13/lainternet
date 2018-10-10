@@ -54,11 +54,6 @@ main (int argc, char * argv[])
     
     /* read config file and parse */
     ready_config (&config);
-
-    /* ready lainternet server */
-    int interface = get_tun_interface ();
-    if (interface == -1)
-	return 1;
     
     return 0;
 }

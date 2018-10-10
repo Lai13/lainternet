@@ -11,6 +11,12 @@ struct lainternet_config
     char * password; /* password of email */
 };
 
+struct lainternet_client
+{
+    char * rcpt; /* the client's email */
+    int interface_fd; /* the client's TUN interface FD */
+};
+
 int ready_config (struct lainternet_config * config);
 
 int parse_config_file (struct lainternet_config * config, FILE * config_file);
