@@ -89,8 +89,6 @@ ready_config (struct lainternet_config * config)
     int parse_result;
     parse_result = parse_config_file (config, config_file);
 
-    fclose (config_file);
-
     /* there was an error in parsing */
     if (parse_result != 0)
     {
@@ -114,6 +112,8 @@ ready_config (struct lainternet_config * config)
 	}
 	
     }
+    
+    fclose (config_file);
 
     return 0;
 }
@@ -160,7 +160,7 @@ parse_config_file (struct lainternet_config * config, FILE * config_file)
 	/* remove new line characters from string */
 	token[strcspn (token, "\r\n")] = 0;
 	/* initializes char pointer in struct */
-	*config_member = malloc (sizeof (token));
+	*config_member = malloc (sizeof (char) * strlen (token));
 	/* copies token to char pointer in struct */
 	strcpy (*config_member, token);
     }
