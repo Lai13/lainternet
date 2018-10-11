@@ -5,8 +5,8 @@
 
 #include "POP3.h"
 
-CURL * curl;
-CURLcode res = CURLE_OK;
+CURL * curl_pop3;
+CURLcode res_pop3 = CURLE_OK;
 
 struct Request * current_request;
 
@@ -21,8 +21,8 @@ get_oldest_email ()
     current_request = &request;
     
     /* check if unprocessed emails */
-    curl_easy_setopt (curl, CURLOPT_CUSTOMREQUEST, "RETR 1");
-    res = curl_easy_perform (curl);
+    curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "RETR 1");
+    res_pop3 = curl_easy_perform (curl_pop3);
 
     return request;
 }
@@ -30,14 +30,14 @@ get_oldest_email ()
 int
 init_pop3 (struct lainternet_config * config)
 {
-    curl = curl_easy_init ();
+    curl_pop3 = curl_easy_init ();
 
-    if (!curl)
+    if (!curl_pop3)
 	return 1;
     
     /* set login credentials */
-    curl_easy_setopt (curl, CURLOPT_USERNAME, config->email);
-    curl_easy_setopt (curl, CURLOPT_PASSWORD, config->password);
+    curl_easy_setopt (curl_pop3, CURLOPT_USERNAME, config->email);
+    curl_easy_setopt (curl_pop3, CURLOPT_PASSWORD, config->password);
     
     char * protocol = "pop3s://";
     
@@ -50,10 +50,10 @@ init_pop3 (struct lainternet_config * config)
     strcpy (pop3_url + strlen(protocol), config->pop3_mail_server);
     
     /* set URL of imap mail server */
-    curl_easy_setopt (curl, CURLOPT_URL, pop3_url);
+    curl_easy_setopt (curl_pop3, CURLOPT_URL, pop3_url);
 
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
-    curl_easy_setopt (curl, CURLOPT_WRITEFUNCTION, parse_data_buffer);
+    curl_easy_setopt (curl_pop3, CURLOPT_VERBOSE, 0L);
+    curl_easy_setopt (curl_pop3, CURLOPT_WRITEFUNCTION, parse_data_buffer);
     
     return 0;
 }
@@ -98,18 +98,18 @@ parse_data_buffer (char * buffer, size_t size, size_t nmemb, void * up)
 	    current_request->is_waiting = 1;
 	 
 	}
-	/* end of important information */
+	/* end of message body */
 	else if (strstr (line, ";") != 0 && current_request->is_waiting == 1)
 	{
 	    current_request->is_waiting = 0;
 	    current_request->finished = 1;
 	    break;
 	}
-	/* important information */
+	/* message body */
 	else if (current_request->is_waiting == 1)
 	{
 	    while (line[0] == ' ')
-		line = &(line[1]);;
+		line = &(line[1]);
 	    current_request->request_text = malloc (strlen (line) * sizeof (char));
 	    strcpy (current_request->request_text, line);
 	}
