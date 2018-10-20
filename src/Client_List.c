@@ -5,7 +5,7 @@
 #include "Client_List.h"
 
 int
-client_list_intitialize (struct Client_List * list)
+client_list_initialize (struct Client_List * list)
 {
     list->length = 0;
     return list->length;
