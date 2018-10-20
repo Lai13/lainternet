@@ -22,12 +22,16 @@ get_oldest_email ()
     
     /* check if unprocessed emails */
     curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "RETR 1");
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 0L);
     res_pop3 = curl_easy_perform (curl_pop3);
     current_request = 0;
     curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "DELE 1");
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1L);
     res_pop3 = curl_easy_perform (curl_pop3);
     return request;
 }
+
+int 
 
 int
 init_pop3 (struct Lainternet_Config * config)
