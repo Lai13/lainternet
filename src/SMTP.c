@@ -96,9 +96,10 @@ write_data (void * ptr, size_t size, size_t nmemb, void * userp)
     	size_t length = strlen (data);
     	memcpy (ptr, data, length);
     	upload_ctx->lines_read++;
+	free (message_body[1]);
     	return length;
     }
-
+    
     return 0;
 }
 
