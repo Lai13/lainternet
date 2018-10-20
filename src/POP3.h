@@ -5,7 +5,7 @@
 
 #include "lainternet.h"
 
-int init_pop3 (struct lainternet_config * config);
+int init_pop3 (struct Lainternet_Config * config);
 
 size_t parse_data_buffer (char * buffer, size_t size, size_t nmemb, void * up);;
 

@@ -1,0 +1,141 @@
+commit a71c6c7e83504eebfcd20b57bd0ab2c643d471d7
+Author: lai13 <lai13@protonmail.com>
+Date:   Thu Oct 11 19:56:34 2018 -0400
+
+    Implements SMTP functions
+
+ src/POP3.c       |  28 +++++++--------
+ src/SMTP.c       | 105 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/SMTP.h       |  21 +++++++++++
+ src/lainternet.c |   4 +--
+ 4 files changed, 141 insertions(+), 17 deletions(-)
+
+commit 9032a32501afff6e303d547cdc98a7e21c306035
+Author: lai13 <lai13@protonmail.com>
+Date:   Wed Oct 10 18:07:19 2018 -0400
+
+    Implemented POP3 email retrieval and parsing into request struct
+
+ src/POP3.c       | 123 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/POP3.h       |  22 ++++++++++
+ src/lainternet.c |  10 +++--
+ 3 files changed, 152 insertions(+), 3 deletions(-)
+
+commit 4d3548f46135d5a76421ae582d7b121d67605cd8
+Author: lai13 <lai13@protonmail.com>
+Date:   Wed Oct 10 15:59:05 2018 -0400
+
+    Removes TUN interface initializer and defines client struct
+
+ src/lainternet.c | 5 -----
+ src/lainternet.h | 6 ++++++
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+commit 7e84a9fd0790d3d75e4f336d64e882d65ab29490
+Author: lai13 <lai13@protonmail.com>
+Date:   Wed Oct 10 15:51:58 2018 -0400
+
+    Changes default config location
+
+ src/lainternet.c | 16 +++++++++-------
+ src/lainternet.h |  2 --
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+commit 334644c22dc68264620a4b9b23406083bd5a34da
+Author: lai13 <lai13@protonmail.com>
+Date:   Wed Oct 10 15:10:15 2018 -0400
+
+    Fixed char pointer allocation in config parsing for lainternet_config struct
+
+ src/lainternet.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+commit 8d2929171abe40b6f5a69739a4065041b2821f79
+Author: lai13 <lai13@protonmail.com>
+Date:   Wed Oct 10 15:07:39 2018 -0400
+
+    Updated variable names from IMAP to POP3
+
+ src/lainternet.c | 8 ++++----
+ src/lainternet.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+commit 58042dda20a9ac15bb043abecf1e70fba677f5c5
+Author: lai13 <lai13@protonmail.com>
+Date:   Sat Aug 18 11:01:11 2018 -0400
+
+    reorganized directory structure in repo
+
+ lainternet.c     | 169 -------------------------------------------------------
+ lainternet.h     |  22 --------
+ src/lainternet.c | 169 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/lainternet.h |  22 ++++++++
+ 4 files changed, 191 insertions(+), 191 deletions(-)
+
+commit 5d4a1a3240dd0c384d4797481ec9c87a1147b287
+Author: lai13 <lai13@protonmail.com>
+Date:   Sat Aug 18 10:44:54 2018 -0400
+
+    removes unused arguments to get_tun_interface()
+
+ lainternet.c | 4 ++--
+ lainternet.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit 91dce16399477ecd826006733dda8aa83aa312a0
+Author: lai13 <lai13@protonmail.com>
+Date:   Sat Aug 18 10:43:27 2018 -0400
+
+    gets tun interface
+
+ lainternet.c | 32 ++++++++++++++++++++++++++++++++
+ lainternet.h |  2 ++
+ 2 files changed, 34 insertions(+)
+
+commit fcea079f16ae44bcb69c72432772789c19f74a60
+Author: lai13 <lai13@protonmail.com>
+Date:   Sat Aug 18 10:25:51 2018 -0400
+
+    re-organizes config reading out of main
+
+ lainternet.c | 28 +++++++++++++++++++++-------
+ lainternet.h |  2 ++
+ 2 files changed, 23 insertions(+), 7 deletions(-)
+
+commit 5270a5bd502a2a47a76cde36c6150b522b0536a4
+Author: lai13 <lai13@protonmail.com>
+Date:   Sat Aug 18 00:24:33 2018 -0400
+
+    Adds mail server options to config struct and parsing. Reduces code repitition in parsing.
+
+ lainternet.c | 60 +++++++++++++++++++++++++++++++++++-------------------------
+ lainternet.h |  2 ++
+ 2 files changed, 37 insertions(+), 25 deletions(-)
+
+commit 333a9a61aac6e5aaea51e97af2a8a3ce23c393c7
+Author: lai13 <lai13@protonmail.com>
+Date:   Fri Aug 17 22:41:41 2018 -0400
+
+    Parses config file and sets config struct members
+
+ lainternet.c | 113 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ lainternet.h |   2 ++
+ 2 files changed, 115 insertions(+)
+
+commit 63788e381bc3abca17ce206001070808203fd690
+Author: lai13 <lai13@protonmail.com>
+Date:   Fri Aug 17 21:49:25 2018 -0400
+
+    Reads command line options
+
+ lainternet.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+commit 4eded4538430e6b224f0cee0bc2bd97329724a15
+Author: lai13 <lai13@protonmail.com>
+Date:   Fri Aug 17 21:02:13 2018 -0400
+
+    Initial Commit
+
+ lainternet.c | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)

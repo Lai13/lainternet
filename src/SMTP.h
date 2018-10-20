@@ -3,19 +3,19 @@
 
 #include "lainternet.h"
 
-struct send_request
+struct Send_Request
 {
-    struct lainternet_client client;
+    struct Lainternet_Client client;
     char * message_body;
 };
 
-struct upload_status
+struct Upload_Status
 {
     int lines_read;
 };
 
-int init_smtp (struct lainternet_config * config);
-int request_send (struct send_request * request);
+int init_smtp (struct Lainternet_Config * config);
+int request_send (struct Send_Request * request);
 size_t write_data (void * ptr, size_t size, size_t nmemb, void *userp);
 
 #endif

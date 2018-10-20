@@ -30,7 +30,7 @@ get_oldest_email ()
 }
 
 int
-init_pop3 (struct lainternet_config * config)
+init_pop3 (struct Lainternet_Config * config)
 {
     curl_pop3 = curl_easy_init ();
 

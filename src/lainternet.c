@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <linux/if_tun.h>
-
+#include <unistd.h>
 #include "lainternet.h"
 #include "POP3.h"
 #include "SMTP.h"
@@ -17,7 +17,7 @@
 int
 main (int argc, char * argv[])
 {
-    struct lainternet_config config;
+    struct Lainternet_Config config;
     
     config.is_custom_arg = 0;
 
@@ -81,7 +81,7 @@ get_tun_interface ()
 }
 
 int
-ready_config (struct lainternet_config * config)
+ready_config (struct Lainternet_Config * config)
 {
     FILE * config_file;
     config_file = fopen (config->location, "r");
@@ -118,7 +118,7 @@ ready_config (struct lainternet_config * config)
 }
 
 int
-parse_config_file (struct lainternet_config * config, FILE * config_file)
+parse_config_file (struct Lainternet_Config * config, FILE * config_file)
 {
     /* if file could not be found, return 1 */
     if (config_file == 0)

@@ -1,7 +1,7 @@
 #ifndef LAINTERNET_H
 #define LAINTERNET_H
 
-struct lainternet_config
+struct Lainternet_Config
 {
     int  is_custom_arg; /* if has been set by custom arguments */
     char * location; /* location of config file */
@@ -11,15 +11,15 @@ struct lainternet_config
     char * password; /* password of email */
 };
 
-struct lainternet_client
+struct Lainternet_Client
 {
     char * rcpt; /* the client's email */
     int interface_fd; /* the client's TUN interface FD */
 };
 
-int ready_config (struct lainternet_config * config);
+int ready_config (struct Lainternet_Config * config);
 
-int parse_config_file (struct lainternet_config * config, FILE * config_file);
+int parse_config_file (struct Lainternet_Config * config, FILE * config_file);
 
 int get_tun_interface ();
 
