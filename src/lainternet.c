@@ -10,13 +10,23 @@
 #include <net/if.h>
 #include <linux/if_tun.h>
 #include <unistd.h>
+#include <sys/mman.h>
+
 #include "lainternet.h"
+#include "Client_List.h"
 #include "POP3.h"
 #include "SMTP.h"
 
 int
 main (int argc, char * argv[])
 {
+    /* check if user is root */
+    if (geteuid () != 0)
+    {
+	printf ("Exiting... user is not root!\n");
+	return 1;
+    }
+    
     struct Lainternet_Config config;
     
     config.is_custom_arg = 0;
@@ -58,26 +68,6 @@ main (int argc, char * argv[])
     ready_config (&config);
     
     return 0;
-}
-
-int
-get_tun_interface ()
-{
-    int interface = open ("/dev/net/tun", O_RDWR | O_NONBLOCK);
-
-    struct ifreq ifr;
-    memset (&ifr, 0, sizeof (ifr));
-
-    /* set as TUN device and do not provide packet info */
-    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-
-    if (ioctl (interface, TUNSETIFF, &ifr))
-    {
-	perror ("Error getting TUN interface");
-	return -1;
-    }
-
-    return interface;
 }
 
 int
@@ -165,4 +155,25 @@ parse_config_file (struct Lainternet_Config * config, FILE * config_file)
     }
     
     return 0;
+}
+
+int
+get_tun_interface ()
+{
+    int interface = open ("/dev/net/tun", O_RDWR | O_NONBLOCK);
+
+    struct ifreq ifr;
+    memset (&ifr, 0, sizeof (ifr));
+
+    /* set as TUN device and do not provide packet info */
+    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
+
+    if (ioctl (interface, TUNSETIFF, &ifr))
+    {
+	perror ("Error getting TUN interface");
+	return -1;
+    }
+
+    return interface;
+
 }
