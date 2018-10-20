@@ -23,7 +23,9 @@ get_oldest_email ()
     /* check if unprocessed emails */
     curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "RETR 1");
     res_pop3 = curl_easy_perform (curl_pop3);
-
+    current_request = 0;
+    curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "DELE 1");
+    res_pop3 = curl_easy_perform (curl_pop3);
     return request;
 }
 
@@ -49,7 +51,7 @@ init_pop3 (struct lainternet_config * config)
     strcpy (pop3_url, protocol);
     strcpy (pop3_url + strlen(protocol), config->pop3_mail_server);
     
-    /* set URL of imap mail server */
+    /* set URL of pop3 mail server */
     curl_easy_setopt (curl_pop3, CURLOPT_URL, pop3_url);
 
     curl_easy_setopt (curl_pop3, CURLOPT_VERBOSE, 0L);
