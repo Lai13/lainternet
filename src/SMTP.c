@@ -32,7 +32,10 @@ request_send (struct Send_Request * req)
     request = req;
 
     res_smtp = curl_easy_perform (curl_smtp);
-
+    
+    free (upload_ctx);
+    free (req);
+    
     if (res_smtp != CURLE_OK)
 	return -1;
 
