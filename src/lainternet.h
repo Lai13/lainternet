@@ -1,6 +1,9 @@
 #ifndef LAINTERNET_H
 #define LAINTERNET_H
 
+#define PACKET_HEADER "{HDLT:"
+#define PACKET_FOOTER "HDLT}"
+
 struct Lainternet_Config
 {
     int  is_custom_arg; /* if has been set by custom arguments */
@@ -21,6 +24,6 @@ int ready_config (struct Lainternet_Config * config);
 
 int parse_config_file (struct Lainternet_Config * config, FILE * config_file);
 
-int get_tun_interface ();
+int get_tun_interface (char * name);
 
 #endif

@@ -12,10 +12,14 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
+#include "base64.h"
+
 #include "lainternet.h"
 #include "Client_List.h"
 #include "POP3.h"
 #include "SMTP.h"
+
+int tun_id = 0;
 
 int
 main (int argc, char * argv[])
@@ -66,6 +70,70 @@ main (int argc, char * argv[])
     
     /* read config file and parse */
     ready_config (&config);
+    
+    struct Client_List *  clients;
+    clients = malloc (sizeof (struct Client_List));
+    client_list_initialize (clients);
+
+    init_pop3 (&config);
+    init_smtp (&config);
+    
+    while (1)
+    {
+    	struct Request pop3_request;
+    	pop3_request = get_oldest_email ();
+	printf ("Sender: %s, Message: %s\n", pop3_request.sender,
+		pop3_request.message);
+    	struct Lainternet_Client c;
+    	if (pop3_request.sender != 0)
+    	{
+    	    if (client_list_get (clients, pop3_request.sender) == 0)
+    	    {
+    		/* client is new */
+    		c.rcpt = pop3_request.sender;
+    		char * n = malloc (sizeof (char) * 2);
+    		n[0] = ++tun_id;
+    		n[1] = '\0';
+    		c.interface_fd = get_tun_interface (n);
+    	       	client_list_add (clients, pop3_request.sender, &c);
+    	    }
+    	    else
+    	    {
+    		c = *(client_list_get (clients, pop3_request.sender));
+    	    }
+
+	    char * decoded = malloc (Base64decode_len (pop3_request.message));
+	    Base64decode (decoded, pop3_request.message);
+
+    	    write(c.interface_fd, decoded,
+    	    	  strlen (decoded));
+	    free (decoded);
+    	}
+    	char packet[65507];
+
+    	for (int i = 0; i < clients->length; i++)
+    	{
+    	    int len = 0;
+    	    struct Lainternet_Client *  c;
+    	    if ((c = client_list_iget (clients, i)) == 0)
+    		continue;
+	    
+    	    if ((len = read (c->interface_fd, &packet, sizeof (packet))) > 0)
+    	    {
+    		struct Send_Request smtp_request;
+    		smtp_request.client = *c;
+    		int true_length = strlen (packet);
+    		smtp_request.message_body = malloc (sizeof (char)
+    						    * true_length);
+    		strncpy (smtp_request.message_body, packet, true_length);
+    		request_send (&smtp_request);
+    	    }
+    	    else
+    	    {
+    		continue;
+    	    }
+    	}
+    }
     
     return 0;
 }
@@ -158,7 +226,7 @@ parse_config_file (struct Lainternet_Config * config, FILE * config_file)
 }
 
 int
-get_tun_interface ()
+get_tun_interface (char * name)
 {
     int interface = open ("/dev/net/tun", O_RDWR | O_NONBLOCK);
 
@@ -167,8 +235,8 @@ get_tun_interface ()
 
     /* set as TUN device and do not provide packet info */
     ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-
-    if (ioctl (interface, TUNSETIFF, &ifr))
+    strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name));
+    if (ioctl (interface, TUNSETIFF, &ifr) < 0)
     {
 	perror ("Error getting TUN interface");
 	return -1;

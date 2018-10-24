@@ -15,7 +15,6 @@ int
 client_list_add (struct Client_List * list, char * key, struct Lainternet_Client * value)
 {
     int length = list->length;
-
     if (length == 0)
     {
 	/* for efficiency and proper initialization */
@@ -107,8 +106,10 @@ struct Lainternet_Client *
 client_list_iget (struct Client_List * list, int index)
 {
     struct Lainternet_Client * c = 0;
-    if ((c = &list->values[index]))
+    if ((c = &(list->values[index])))
+    {
 	return &list->values[index];
+    }
     return 0;
 }
 
