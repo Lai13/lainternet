@@ -32,10 +32,10 @@ get_oldest_email ()
     if (res_pop3 == CURLE_OK)
 	parse_memory (&request);
     
-    /* /\* delete read email *\/ */
-    /* curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "DELE 1"); */
-    /* curl_easy_setopt(curl_pop3, CURLOPT_NOBODY, 1L); */
-    /* res_pop3 = curl_easy_perform (curl_pop3); */
+    /* delete read email */
+    curl_easy_setopt (curl_pop3, CURLOPT_CUSTOMREQUEST, "DELE 1");
+    curl_easy_setopt(curl_pop3, CURLOPT_NOBODY, 1L);
+    res_pop3 = curl_easy_perform (curl_pop3);
 
     free (data_m.memory);
     
